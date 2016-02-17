@@ -160,6 +160,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func didTapClearButton(sender: UIBarButtonItem) {
         deletePins(pins)
+        editing = false
     }
     
     // MARK: - Gestures
