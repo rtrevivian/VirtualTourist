@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		790E38921C76131400189AC9 /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E38911C76131400189AC9 /* FlickrClient.swift */; };
 		79815F531C74E69400AFD380 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79815F521C74E69400AFD380 /* ImageCache.swift */; };
 		79815F571C74E6BE00AFD380 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79815F561C74E6BE00AFD380 /* PhotoCell.swift */; };
 		79A836A81C6EC8AE0072E577 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A836A71C6EC8AE0072E577 /* AppDelegate.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		790E38911C76131400189AC9 /* FlickrClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FlickrClient.swift; path = Model/FlickrClient.swift; sourceTree = "<group>"; };
 		79815F521C74E69400AFD380 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageCache.swift; path = Model/ImageCache.swift; sourceTree = "<group>"; };
 		79815F561C74E6BE00AFD380 /* PhotoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhotoCell.swift; path = View/PhotoCell.swift; sourceTree = "<group>"; };
 		79A836A41C6EC8AE0072E577 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +130,7 @@
 				79815F521C74E69400AFD380 /* ImageCache.swift */,
 				79A836D61C6ECF9E0072E577 /* Photo.swift */,
 				79A836D81C6ECFA90072E577 /* Pin.swift */,
+				790E38911C76131400189AC9 /* FlickrClient.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				79A836D91C6ECFA90072E577 /* Pin.swift in Sources */,
+				790E38921C76131400189AC9 /* FlickrClient.swift in Sources */,
 				79815F571C74E6BE00AFD380 /* PhotoCell.swift in Sources */,
 				79A836D71C6ECF9E0072E577 /* Photo.swift in Sources */,
 				79815F531C74E69400AFD380 /* ImageCache.swift in Sources */,
