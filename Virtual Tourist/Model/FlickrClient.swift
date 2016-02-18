@@ -29,47 +29,13 @@ class FlickrClient {
         return photoUrlParts.joinWithSeparator("")
     }
     
-    class func searchFlickr(pin: Pin, completionHandler: ((count: Int) -> Void)?) {
+    class func searchFlickr(pin: Pin, completionHandler: ((data: NSData?) -> Void)?) {
         let url = "\(Config.SearchURL)&lat=\(pin.coordinate.latitude)&lon=\(pin.coordinate.longitude)&radius=\(Config.Radius)&per_page=\(Config.Limit)&page=\(pin.page)"
         let request = NSURLRequest(URL: NSURL(string: url)!)
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, error in
-            guard error == nil else {
-                completionHandler?(count: 0)
-                return
-            }
-            guard data != nil else {
-                completionHandler?(count: 0)
-                return
-            }
-            let count = self.savePhotos(pin, data: data!)
-            completionHandler?(count: count)
+            completionHandler?(data: data)
         }
         task.resume()
-    }
-    
-    class func savePhotos(pin: Pin, data: NSData) -> Int {
-        var count = 0
-        do {
-            let result = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-            if let photoData = result["photos"] as? [String: AnyObject] {
-                if let photos = photoData["photo"] as? [AnyObject] {
-                    for photo in photos {
-                        let file = photo["id"] as! String
-                        let photoUrl = buildFlickrUrl(photo as! [String : AnyObject])
-                        _ = Photo(dictionary: ["url": photoUrl, "file": file, "pin": pin], context: CoreDataStackManager.sharedInstance().managedObjectContext)
-                        do {
-                            try CoreDataStackManager.sharedInstance().managedObjectContext.save()
-                        } catch {
-                            print("Error savePhotos():", error)
-                        }
-                        count++
-                    }
-                    return count
-                }
-            }
-        } catch {
-        }
-        return count
     }
     
 }

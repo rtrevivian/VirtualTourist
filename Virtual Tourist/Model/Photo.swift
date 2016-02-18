@@ -58,9 +58,11 @@ class Photo: NSManagedObject {
     // MARK: - Methods
     
     func saveImage(image: UIImage) {
-        ImageCache.sharedInstance().storeImage(image, withIdentifier: file)
-        downloadStatus = .Loaded
-        NSNotificationCenter.defaultCenter().postNotificationName(Notification.Loaded, object: self)
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            ImageCache.sharedInstance().storeImage(image, withIdentifier: self.file)
+            self.downloadStatus = .Loaded
+            NSNotificationCenter.defaultCenter().postNotificationName(Notification.Loaded, object: self)
+        }
     }
     
     func delete() {

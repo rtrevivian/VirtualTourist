@@ -70,23 +70,49 @@ class Pin: NSManagedObject, MKAnnotation {
         if getNextPage {
             page++
         }
-        FlickrClient.searchFlickr(self) { (count) -> Void in
-            if count > 0 {
-                var unloadedPhotos = self.photos.count
-                for photo in self.photos {
-                    photo.downloadStatus = .Loading
-                    _ = ImageCache.sharedInstance().downloadImage(photo.url) { imageData, error in
-                        unloadedPhotos--
-                        guard imageData != nil else {
-                            return
+        FlickrClient.searchFlickr(self) { (data) -> Void in
+            guard data != nil else {
+                return
+            }
+            do {
+                let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)
+                if let photoData = result["photos"] as? [String: AnyObject] {
+                    if let photos = photoData["photo"] as? [AnyObject] {
+                        for photo in photos {
+                            let file = photo["id"] as! String
+                            let photoUrl = FlickrClient.buildFlickrUrl(photo as! [String : AnyObject])
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                let _ = Photo(dictionary: [Photo.Keys.URL: photoUrl, Photo.Keys.File: file, Photo.Keys.Pin: self], context: CoreDataStackManager.sharedInstance().managedObjectContext)
+                                do {
+                                    try CoreDataStackManager.sharedInstance().managedObjectContext.save()
+                                } catch {
+                                    print("Error savePhotos():", error)
+                                }
+                            })
                         }
-                        let image = UIImage(data: imageData!)
-                        photo.saveImage(image!)
-                        if unloadedPhotos == 0 {
-                            NSNotificationCenter.defaultCenter().postNotificationName(Notifications.AllPhotosLoaded, object: self)
-                        }
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            if photos.count > 0 {
+                                var unloadedPhotos = self.photos.count
+                                for photo in self.photos {
+                                    photo.downloadStatus = .Loading
+                                    _ = ImageCache.sharedInstance().downloadImage(photo.url) { imageData, error in
+                                        unloadedPhotos--
+                                        guard imageData != nil else {
+                                            return
+                                        }
+                                        let image = UIImage(data: imageData!)
+                                        photo.saveImage(image!)
+                                        if unloadedPhotos == 0 {
+                                            NSNotificationCenter.defaultCenter().postNotificationName(Notifications.AllPhotosLoaded, object: self)
+                                        }
+                                    }
+                                }
+                            }
+                        })
                     }
                 }
+            } catch {
+                print("Error parsing json", error)
             }
         }
     }

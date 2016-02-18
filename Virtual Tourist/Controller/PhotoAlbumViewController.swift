@@ -65,7 +65,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         
         var allPhotosLoaded = true
         var noPhotosLoaded = true
-        collectionLabel.text = "Loading"
         for photo in pin.photos {
             if photo.downloadStatus != .Loaded {
                 allPhotosLoaded = false
